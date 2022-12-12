@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:my_boilerplate/bloc/places/places_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:my_boilerplate/components/error.dart';
 import 'package:my_boilerplate/components/loading.dart';
 import 'package:my_boilerplate/components/placesTile.dart';
 import 'package:my_boilerplate/models/places.dart';
@@ -16,22 +17,12 @@ class _BeachState extends State<Beach> {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<PlacesBloc, PlacesState>(
-      listener: (context, state) {
-        if (state is PlacesLoadingError) {
-          ScaffoldMessenger.of(context).hideCurrentSnackBar();
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              content: Text(state.error),
-              backgroundColor: Colors.red,
-              duration: const Duration(seconds: 1)));
-        }
-      },
+      listener: (context, state) {},
       builder: (context, state) {
         if (state is PlacesLoadingSuccess) {
           return RefreshIndicator(
             onRefresh: (() async {
-              setState(() {
-                BlocProvider.of<PlacesBloc>(context).add(LoadPlaces());
-              });
+              loadPlaces(context);
             }),
             child: ListView(
               children: state.places.map(createPlacesTiles).toList(),
@@ -40,11 +31,24 @@ class _BeachState extends State<Beach> {
         } else if (state is PlacesLoading) {
           return const Loading();
         }
-        return Scaffold(
-          body: Container(),
+        return RefreshIndicator(
+          onRefresh: () async {
+            loadPlaces(context);
+          },
+          child: ErrorScreen(
+            function: () {
+              loadPlaces(context);
+            },
+          ),
         );
       },
     );
+  }
+
+  void loadPlaces(BuildContext context) {
+    setState(() {
+      BlocProvider.of<PlacesBloc>(context).add(LoadPlaces());
+    });
   }
 
   Widget createPlacesTiles(Places e) => PlacesTiles(e: e);

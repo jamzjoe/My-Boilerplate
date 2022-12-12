@@ -14,11 +14,12 @@ class PlacesBloc extends Bloc<PlacesEvent, PlacesState> {
     on<PlacesEvent>((event, emit) {});
 
     on<LoadPlaces>((event, emit) async {
-      
       emit(PlacesInitial());
       emit(PlacesLoading());
       try {
-        final places = await _placesRepository.getPlaces();
+        final places = await _placesRepository
+            .getPlaces()
+            .timeout(const Duration(seconds: 10));
         emit(PlacesLoadingSuccess(places));
       } catch (error) {
         emit(PlacesLoadingError(error.toString()));

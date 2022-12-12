@@ -13,8 +13,7 @@ class ProfileTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        child: Row(
+    return Row(
       mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -38,6 +37,6 @@ class ProfileTile extends StatelessWidget {
         ),
         Icon(icon)
       ],
-    ));
+    );
   }
 }

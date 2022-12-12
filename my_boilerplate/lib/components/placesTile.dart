@@ -19,7 +19,12 @@ class PlacesTiles extends StatelessWidget {
               clipBehavior: Clip.antiAlias,
               decoration:
                   BoxDecoration(borderRadius: BorderRadius.circular(20)),
-              child: Image(image: NetworkImage(e.imageUrl.toString())),
+              child: FadeInImage.assetNetwork(
+                image: e.imageUrl.toString(),
+                fadeInCurve: Curves.easeIn,
+                fadeInDuration: const Duration(seconds: 2),
+                placeholder: 'assets/beach.png',
+              ),
             ),
             const SizedBox(
               height: 10,
@@ -29,19 +34,43 @@ class PlacesTiles extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                MyText(text: e.name.toString(), size: 16),
+                MyText(
+                  text: e.name.toString(),
+                  size: 16,
+                  type: 'heading',
+                ),
                 MyText(text: "${e.rate} ratings", size: 14)
               ],
             ),
             const SizedBox(
               height: 5,
             ),
-            MyText(text: '${e.kilometers}', size: 14),
-            MyText(text: '${e.date}', size: 14),
+            MyText(
+              text: '${e.kilometers}',
+              size: 14,
+              type: 'light',
+            ),
+            MyText(
+              text: '${e.date}',
+              size: 14,
+              type: 'light',
+            ),
             const SizedBox(
               height: 10,
             ),
-            MyText(text: '₱${e.price} per night', size: 14)
+            Row(
+              children: [
+                MyText(
+                  text: '₱${e.price}',
+                  size: 14,
+                  type: 'heading',
+                ),
+                const SizedBox(
+                  width: 5,
+                ),
+                const MyText(text: 'per night', size: 12),
+              ],
+            )
           ],
         ),
       ),
